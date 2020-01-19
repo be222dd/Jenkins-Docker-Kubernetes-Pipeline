@@ -28,6 +28,24 @@ pipeline{
             }
         }
 
+        stage('Deploy to kubertenes'){
+            steps{
+                sh "chmod +x changeTag.sh"
+                sh "./changeTag.sh ${BUILD_NUMBER}"
+                sshagent(['kops-machine']) {
+                    sh "scp -o StrictHostKeyChecking=no services.yml my-app-pod.yml ec2-user@52.66.70.61:/home/ec2-user/"
+                    script{
+                        try{
+                            sh "ssh ec2-user@52.66.70.61 kubectl apply -f ."
+                        }catch(error){
+                            sh "ssh ec2-user@52.66.70.61 kubectl create -f ."
+                        }
+                    }
+                }
+            }
+
+        }
+
     }
 }
 
