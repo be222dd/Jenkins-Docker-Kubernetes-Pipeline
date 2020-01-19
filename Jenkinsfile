@@ -26,9 +26,12 @@ pipeline{
 
         stage('Push to DockerHub'){
             steps{
-                withCredentials([string(credentialsId: 'be222dd', variable: 'dockerHubPwd')]) {
-                    sh "docker login -u be222dd -p ${dockerHubPwd}"
-                    sh "docker push be222dd/docker-sprint-boot:${DOCKER_TAG}"
+                script{
+                    docker.withRegistry('https://registry.hub.docker.com','dockerHub'){
+			            def customImage = docker.build("be222dd/docker-sprint-boot:${DOCKER_TAG}")
+			            customImage.push()
+	                }
+
                 }
             }
         }
