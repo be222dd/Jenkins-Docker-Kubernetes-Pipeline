@@ -23,6 +23,16 @@ pipeline{
                 sh "docker build . -t be222dd/docker-sprint-boot:${DOCKER_TAG}"
             }
         }
+
+        stage('Push to DockerHub'){
+            steps{
+                withCredentials([string(credentialsId: 'be222dd', variable: 'dockerHubPwd')]) {
+                    sh "docker login -u be222dd -p ${dockerHubPwd}"
+                    sh "docker push be222dd/docker-sprint-boot:${DOCKER_TAG}"
+                }
+            }
+        }
+
     }
 }
 
