@@ -18,17 +18,12 @@ pipeline{
 
         }
 
-        stage('Build Docker Image'){
-            steps{
-                sh "docker build . -t be222dd/docker-sprint-boot:${DOCKER_TAG}"
-            }
-        }
-
-        stage('Push to DockerHub'){
+       
+        stage('Build and Push to DockerHub'){
             steps{
                 script{
                     docker.withRegistry('https://registry.hub.docker.com','dockerHub'){
-                        def customImage = docker.build("be222dd/docker-sprint-boot:${BUILD_NUMBER}")
+                        def customImage = docker.build("be222dd/docker-sprint-boot:${DOCKER_TAG}")
 			            customImage.push()
 	                }
 
