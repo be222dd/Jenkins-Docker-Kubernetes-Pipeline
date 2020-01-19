@@ -1,9 +1,6 @@
 pipeline{
     agent any
     
-    environment{
-        DOCKER_TAG=getDockerTagFromGitCommitId()
-    }
 
     tools{
         maven 'maven' 
@@ -18,12 +15,12 @@ pipeline{
 
         }
 
-       
-        stage('Build and Push to DockerHub'){
+        stage('Push to DockerHub'){
             steps{
                 script{
                     docker.withRegistry('https://registry.hub.docker.com','dockerHub'){
-                        def customImage = docker.build("be222dd/docker-sprint-boot:${DOCKER_TAG}")
+			            
+                        def customImage = docker.build("be222dd/docker-sprint-boot:${BUILD_NUMBER}")
 			            customImage.push()
 	                }
 
@@ -34,8 +31,3 @@ pipeline{
     }
 }
 
-
-def getDockerTagFromGitCommitId(){
-    def tag  = sh script: 'git rev-parse HEAD', returnStdout: true
-    return tag
-}
