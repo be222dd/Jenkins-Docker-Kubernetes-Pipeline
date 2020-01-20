@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: myapp1
+  name: myapp2
 spec:
   selector:
     app: myapp
@@ -10,3 +10,4 @@ spec:
     port: 80
     targetPort: 8080
   type: LoadBalancer   
+  cloud_provider: "aws"
