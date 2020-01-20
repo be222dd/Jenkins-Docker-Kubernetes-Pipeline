@@ -1,6 +1,5 @@
 kind: Service
 apiVersion: v1
-cloud_provider: "aws"
 metadata:
   name: myapp2
 spec:
